@@ -9,15 +9,12 @@ const PORT = 3000
 const server = express()
     .listen(PORT, () => console.log(`Listening on ${PORT}`))
 
-// 如果將 WebSocket 和 HTTP 服務設置在相同的 port 上，
-// 會導致兩者之間的衝突，因為 WebSocket 和 HTTP 使用的協議不同。HTTP 協議使用的是短暫的、無狀態的連接，
-// 而 WebSocket 則是基於 TCP 協議的長連接，它需要獨立的通道進行通信。
-// 因此，如果將 WebSocket 設置在 HTTP 的 port 上，會導致 HTTP 服務器無法正常處理 WebSocket 的請求，
-// 從而導致 WebSocket 連接失敗或無法建立。
-// 因此，為了避免這種衝突，通常會將 WebSocket 和 HTTP 設置在不同的 port 上。
-
 //將 express 交給 SocketServer 開啟 WebSocket 的服務
 const wss = new SocketServer({ server })
+// 這段程式碼使用了 ws 模組中的 SocketServer 類別，建立了一個 WebSocket 伺服器，並將其綁定到一個現有的 HTTP 伺服器上。
+// 具體來說，server 參數是一個 Node.js HTTP 伺服器物件，表示要將 WebSocket 伺服器綁定到該 HTTP 伺服器上。
+// SocketServer 類別的建構子接受一個物件作為參數，該物件包含一個 server 屬性，其值為要綁定的 HTTP 伺服器。
+// 因此，這個程式碼創建了一個新的 SocketServer 物件 wss，並將其綁定到先前建立的 HTTP 伺服器上。現在，wss 就可以使用 WebSocket 協定來處理來自客戶端的請求和訊息。
 
 //當 WebSocket 從外部連結時執行
 wss.on('connection', ws => { //ws 物件是傳給回調函式的參數，代表伺服器和客戶端之間的 WebSocket 連線。你可以使用這個物件來在兩端之間發送和接收訊息。
